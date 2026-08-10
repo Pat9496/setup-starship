@@ -1,0 +1,237 @@
+format = """
+${custom.fedora}${custom.ubuntu}${custom.debian}${custom.arch}${custom.opensuse}${custom.linux}$username$hostname$directory$git_branch$git_commit$git_state$git_status$terraform$kubernetes$azure${custom.toolbox}${custom.distrobox}${custom.podman}${custom.docker}$shlvl$jobs$fill$cmd_duration$status$time
+${custom.root_symbol}${custom.toolbox_symbol}${custom.distrobox_symbol}${custom.podman_symbol}${custom.docker_symbol}${custom.mosh_symbol}${custom.ssh_symbol}$character"""
+
+add_newline = true
+scan_timeout = 25
+command_timeout = 850
+palette = "kinoite"
+
+[palettes.kinoite]
+bg = "#07131f"
+fg = "#dfefff"
+black = "#0b1f33"
+red = "#ff5555"
+green = "#3ddc84"
+yellow = "#f1fa8c"
+blue = "#51a2da"
+magenta = "#ad83f9"
+cyan = "#8be9fd"
+white = "#dfefff"
+bright_black = "#6272a4"
+fedora_blue = "#51a2da"
+docker_blue = "#1d63ed"
+podman_purple = "#892ca0"
+container_violet = "#ad83f9"
+toolbox_dark_blue = "#1f4f8f"
+distrobox_violet = "#a070e0"
+ssh_green = "#50fa7b"
+mosh_cyan = "#8be9fd"
+dark_blue = "#205090"
+
+[fill]
+symbol = " "
+
+[custom.fedora]
+command = "printf ''"
+when = "grep -Eqi '^ID=(fedora|bazzite)|^VARIANT_ID=bazzite|bazzite' /etc/os-release"
+style = "bold fedora_blue"
+format = "[$output]($style) "
+
+[custom.ubuntu]
+command = "printf ''"
+when = "grep -Eqi '^ID=ubuntu' /etc/os-release"
+style = "bold #e95420"
+format = "[$output]($style) "
+
+[custom.debian]
+command = "printf ''"
+when = "grep -Eqi '^ID=debian' /etc/os-release"
+style = "bold #d70a53"
+format = "[$output]($style) "
+
+[custom.arch]
+command = "printf ''"
+when = "grep -Eqi '^ID=arch' /etc/os-release"
+style = "bold #1793d1"
+format = "[$output]($style) "
+
+[custom.opensuse]
+command = "printf ''"
+when = "grep -Eqi '^ID=(opensuse|opensuse-tumbleweed|opensuse-leap)' /etc/os-release"
+style = "bold #73ba25"
+format = "[$output]($style) "
+
+[custom.linux]
+command = "printf ''"
+when = "! grep -Eqi '^ID=(fedora|bazzite|ubuntu|debian|arch|opensuse|opensuse-tumbleweed|opensuse-leap)|^VARIANT_ID=bazzite|bazzite' /etc/os-release"
+style = "bold #dfefff"
+format = "[$output]($style) "
+
+[custom.toolbox]
+command = "printf '󱂬 toolbox'"
+when = '[ -n "${TOOLBOX_PATH:-}" ]'
+style = "bold toolbox_dark_blue"
+format = "[$output ]($style)"
+
+[custom.distrobox]
+command = "printf ' distrobox'"
+when = '[ -z "${TOOLBOX_PATH:-}" ] && { [ -n "${DISTROBOX_ENTER_PATH:-}" ] || [ -n "${DBX_CONTAINER_NAME:-}" ] || grep -qi distrobox /run/.containerenv 2>/dev/null; }'
+style = "bold distrobox_violet"
+format = "[$output ]($style)"
+
+[custom.podman]
+command = "printf ' podman'"
+when = '[ -z "${TOOLBOX_PATH:-}" ] && [ -z "${DISTROBOX_ENTER_PATH:-}" ] && [ -z "${DBX_CONTAINER_NAME:-}" ] && [ -f /run/.containerenv ]'
+style = "bold podman_purple"
+format = "[$output ]($style)"
+
+[custom.docker]
+command = "printf ' docker'"
+when = '[ -z "${TOOLBOX_PATH:-}" ] && [ -z "${DISTROBOX_ENTER_PATH:-}" ] && [ -z "${DBX_CONTAINER_NAME:-}" ] && [ -f /.dockerenv ]'
+style = "bold docker_blue"
+format = "[$output ]($style)"
+
+[custom.root_symbol]
+command = "printf '󰌾'"
+when = '[ "$(id -u)" -eq 0 ]'
+style = "bold red"
+format = "[$output]($style) "
+
+[custom.toolbox_symbol]
+command = "printf '󱂬'"
+when = '[ -n "${TOOLBOX_PATH:-}" ]'
+style = "bold toolbox_dark_blue"
+format = "[$output]($style) "
+
+[custom.distrobox_symbol]
+command = "printf ''"
+when = '[ -z "${TOOLBOX_PATH:-}" ] && { [ -n "${DISTROBOX_ENTER_PATH:-}" ] || [ -n "${DBX_CONTAINER_NAME:-}" ] || grep -qi distrobox /run/.containerenv 2>/dev/null; }'
+style = "bold container_violet"
+format = "[$output]($style) "
+
+[custom.podman_symbol]
+command = "printf ''"
+when = '[ -z "${TOOLBOX_PATH:-}" ] && [ -z "${DISTROBOX_ENTER_PATH:-}" ] && [ -z "${DBX_CONTAINER_NAME:-}" ] && [ -f /run/.containerenv ]'
+style = "bold podman_purple"
+format = "[$output]($style) "
+
+[custom.docker_symbol]
+command = "printf ''"
+when = '[ -z "${TOOLBOX_PATH:-}" ] && [ -z "${DISTROBOX_ENTER_PATH:-}" ] && [ -z "${DBX_CONTAINER_NAME:-}" ] && [ -f /.dockerenv ]'
+style = "bold docker_blue"
+format = "[$output]($style) "
+
+[custom.mosh_symbol]
+command = "printf '󰒍'"
+when = '[ -n "${MOSH_IP:-}" ]'
+style = "bold mosh_cyan"
+format = "[$output]($style) "
+
+[custom.ssh_symbol]
+command = "printf '󰣀'"
+when = '[ -z "${MOSH_IP:-}" ] && { [ -n "${SSH_CONNECTION:-}" ] || [ -n "${SSH_CLIENT:-}" ]; }'
+style = "bold ssh_green"
+format = "[$output]($style) "
+
+[username]
+show_always = true
+style_user = "bold cyan"
+style_root = "bold red"
+format = "[$user]($style)"
+
+[hostname]
+ssh_only = false
+style = "dark_blue"
+format = "[@$hostname ]($style)"
+
+[directory]
+style = "bold blue"
+truncation_length = 4
+truncate_to_repo = false
+read_only = " "
+format = "[ $path$read_only ]($style)"
+
+[git_branch]
+symbol = " "
+style = "bold green"
+format = "[$symbol$branch ]($style)"
+
+[git_commit]
+tag_disabled = false
+only_detached = true
+style = "bold yellow"
+format = "[󰜘 $hash$tag ]($style)"
+
+[git_state]
+style = "bold yellow"
+format = "[ $state( $progress_current/$progress_total) ]($style)"
+
+[git_status]
+style = "yellow"
+format = "[$all_status$ahead_behind ]($style)"
+conflicted = " ${count} "
+ahead = "⇡${count} "
+behind = "⇣${count} "
+diverged = "⇕⇡${ahead_count}⇣${behind_count} "
+up_to_date = ""
+untracked = "?${count} "
+stashed = "${count} "
+modified = "!${count} "
+staged = "+${count} "
+renamed = "»${count} "
+deleted = "✘${count} "
+
+[terraform]
+symbol = "󱁢 "
+style = "bold cyan"
+format = "[$symbol$workspace ]($style)"
+
+[kubernetes]
+disabled = false
+symbol = "󱃾 "
+style = "bold blue"
+format = "[$symbol$context/$namespace ]($style)"
+
+[azure]
+disabled = false
+symbol = " "
+style = "bold blue"
+format = "[$symbol$subscription ]($style)"
+
+[container]
+disabled = true
+
+[shlvl]
+disabled = false
+threshold = 3
+symbol = "󰞷 "
+style = "bold yellow"
+format = "[$symbol$shlvl ]($style)"
+
+[jobs]
+symbol = " "
+style = "bold cyan"
+format = "[$symbol$number ]($style)"
+
+[cmd_duration]
+min_time = 1000
+style = "bright_black"
+format = "[󱎫 $duration ]($style)"
+
+[status]
+disabled = false
+symbol = "✘ "
+style = "bold red"
+format = "[$symbol$status ]($style)"
+
+[time]
+disabled = false
+time_format = "%H:%M"
+style = "bright_black"
+format = "[ $time ]($style)"
+
+[character]
+success_symbol = "[➜](bold green)"
+error_symbol = "[➜](bold red)"
+vimcmd_symbol = "[←](bold yellow)"

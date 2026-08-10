@@ -1,0 +1,19 @@
+# AI agent instruction files
+CLAUDE.md
+AGENT.md
+.cursorrules
+.windsurfrules
+.clinerules
+GEMINI.md
+.github/copilot-instructions.md
+
+# Archives
+*.zip
+
+# OS/editor files
+.DS_Store
+Thumbs.db
+*.swp
+.vim/
+.vscode/
+.idea/
