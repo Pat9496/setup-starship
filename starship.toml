@@ -165,37 +165,37 @@ dark_blue = "#89b4fa"
 symbol = " "
 
 [custom.fedora]
-command = "printf ''"
+command = "printf '󰣛'"
 when = "grep -Eqi '^ID=(fedora|bazzite)|^VARIANT_ID=bazzite|bazzite' /etc/os-release"
 style = "bold fedora_blue"
 format = "[$output]($style) "
 
 [custom.ubuntu]
-command = "printf ''"
+command = "printf '󰕈'"
 when = "grep -Eqi '^ID=ubuntu' /etc/os-release"
 style = "bold #e95420"
 format = "[$output]($style) "
 
 [custom.debian]
-command = "printf ''"
+command = "printf '󰣚'"
 when = "grep -Eqi '^ID=debian' /etc/os-release"
 style = "bold #d70a53"
 format = "[$output]($style) "
 
 [custom.arch]
-command = "printf ''"
+command = "printf ''"
 when = "grep -Eqi '^ID=arch' /etc/os-release"
 style = "bold #1793d1"
 format = "[$output]($style) "
 
 [custom.opensuse]
-command = "printf ''"
+command = "printf ''"
 when = "grep -Eqi '^ID=(opensuse|opensuse-tumbleweed|opensuse-leap)' /etc/os-release"
 style = "bold #73ba25"
 format = "[$output]($style) "
 
 [custom.linux]
-command = "printf ''"
+command = "printf '󰌽'"
 when = "! grep -Eqi '^ID=(fedora|bazzite|ubuntu|debian|arch|opensuse|opensuse-tumbleweed|opensuse-leap)|^VARIANT_ID=bazzite|bazzite' /etc/os-release"
 style = "bold #dfefff"
 format = "[$output]($style) "
@@ -220,9 +220,9 @@ if [ -z "$name" ]; then
   name=$(sed -n 's/^name="\(.*\)"$/\1/p' /run/.containerenv 2>/dev/null)
 fi
 if [ -n "$name" ]; then
-  printf ' distrobox: %s' "$name"
+  printf '󰦭 distrobox: %s' "$name"
 else
-  printf ' distrobox'
+  printf '󰦭 distrobox'
 fi
 '''
 when = '[ -z "${TOOLBOX_PATH:-}" ] && { [ -n "${DISTROBOX_ENTER_PATH:-}" ] || [ -n "${DBX_CONTAINER_NAME:-}" ] || grep -qi distrobox /run/.containerenv 2>/dev/null; }'
@@ -233,9 +233,9 @@ format = "[$output ]($style)"
 command = '''
 name=$(sed -n 's/^name="\(.*\)"$/\1/p' /run/.containerenv 2>/dev/null)
 if [ -n "$name" ]; then
-  printf ' podman: %s' "$name"
+  printf ' podman: %s' "$name"
 else
-  printf ' podman'
+  printf ' podman'
 fi
 '''
 when = '[ -z "${TOOLBOX_PATH:-}" ] && [ -z "${DISTROBOX_ENTER_PATH:-}" ] && [ -z "${DBX_CONTAINER_NAME:-}" ] && [ -f /run/.containerenv ]'
@@ -243,7 +243,7 @@ style = "bold podman_purple"
 format = "[$output ]($style)"
 
 [custom.docker]
-command = "printf ' docker'"
+command = "printf '󰡨 docker'"
 when = '[ -z "${TOOLBOX_PATH:-}" ] && [ -z "${DISTROBOX_ENTER_PATH:-}" ] && [ -z "${DBX_CONTAINER_NAME:-}" ] && [ -f /.dockerenv ]'
 style = "bold docker_blue"
 format = "[$output ]($style)"
@@ -261,19 +261,19 @@ style = "bold toolbox_dark_blue"
 format = "[$output]($style) "
 
 [custom.distrobox_symbol]
-command = "printf ''"
+command = "printf '󰦭'"
 when = '[ -z "${TOOLBOX_PATH:-}" ] && { [ -n "${DISTROBOX_ENTER_PATH:-}" ] || [ -n "${DBX_CONTAINER_NAME:-}" ] || grep -qi distrobox /run/.containerenv 2>/dev/null; }'
 style = "bold container_violet"
 format = "[$output]($style) "
 
 [custom.podman_symbol]
-command = "printf ''"
+command = "printf ''"
 when = '[ -z "${TOOLBOX_PATH:-}" ] && [ -z "${DISTROBOX_ENTER_PATH:-}" ] && [ -z "${DBX_CONTAINER_NAME:-}" ] && [ -f /run/.containerenv ]'
 style = "bold podman_purple"
 format = "[$output]($style) "
 
 [custom.docker_symbol]
-command = "printf ''"
+command = "printf '󰡨'"
 when = '[ -z "${TOOLBOX_PATH:-}" ] && [ -z "${DISTROBOX_ENTER_PATH:-}" ] && [ -z "${DBX_CONTAINER_NAME:-}" ] && [ -f /.dockerenv ]'
 style = "bold docker_blue"
 format = "[$output]($style) "
@@ -305,11 +305,11 @@ format = "[@$hostname ]($style)"
 style = "bold blue"
 truncation_length = 4
 truncate_to_repo = false
-read_only = " "
+read_only = "󰌾 "
 format = "[ $path$read_only ]($style)"
 
 [git_branch]
-symbol = " "
+symbol = "󰘬 "
 style = "bold green"
 format = "[$symbol$branch ]($style)"
 
@@ -321,7 +321,7 @@ format = "[󰜘 $hash$tag ]($style)"
 
 [git_state]
 style = "bold yellow"
-format = "[ $state( $progress_current/$progress_total) ]($style)"
+format = "[󰘭 $state( $progress_current/$progress_total) ]($style)"
 
 [git_status]
 style = "yellow"
@@ -351,7 +351,7 @@ format = "[$symbol$context/$namespace ]($style)"
 
 [azure]
 disabled = false
-symbol = " "
+symbol = "󰠅 "
 style = "bold blue"
 format = "[$symbol$subscription ]($style)"
 
@@ -366,7 +366,7 @@ style = "bold yellow"
 format = "[$symbol$shlvl ]($style)"
 
 [jobs]
-symbol = " "
+symbol = "󰒓 "
 style = "bold cyan"
 format = "[$symbol$number ]($style)"
 
