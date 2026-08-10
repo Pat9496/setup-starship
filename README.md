@@ -5,17 +5,18 @@ A standalone, idempotent setup script for the [Starship](https://starship.rs) sh
 ## Usage
 
 ```bash
-./install.sh
+./setup-starship.sh
 ```
 
-Open a new terminal afterwards for the prompt to take effect.
+You'll be prompted to pick a color palette (defaults to `kinoite` if you skip the prompt or run non-interactively). Open a new terminal afterwards for the prompt to take effect.
 
 ## What it does
 
-1. Installs the `starship` binary to `~/.local/bin` via the official `starship.rs/install.sh` installer.
-2. Downloads and installs the JetBrainsMono Nerd Font to `~/.local/share/fonts` and refreshes the font cache.
-3. Adds `PATH` and `eval "$(starship init <shell>)"` lines to `~/.bashrc` or `~/.zshrc` (based on `$SHELL`), skipping lines that are already present.
-4. Copies `starship.toml` from this repo to `~/.config/starship.toml`, backing up any existing, differing config first.
+1. Prompts you to choose a color palette: `kinoite`, `bazzite`, `silverblue`, `nord`, `dracula`, `gruvbox`, `catppuccin`.
+2. Installs the `starship` binary to `~/.local/bin` via the official `starship.rs/install.sh` installer.
+3. Downloads and installs the JetBrainsMono Nerd Font to `~/.local/share/fonts` and refreshes the font cache.
+4. Adds `PATH` and `eval "$(starship init <shell>)"` lines to `~/.bashrc` or `~/.zshrc` (based on `$SHELL`), skipping lines that are already present.
+5. Copies `starship.toml` from this repo to `~/.config/starship.toml` with the `palette` line set to your chosen palette, backing up any existing, differing config first.
 
 ## Requirements
 
@@ -23,7 +24,7 @@ Open a new terminal afterwards for the prompt to take effect.
 
 ## Config
 
-`starship.toml` uses a `kinoite` palette and OS/container-aware segments (Fedora/Bazzite, Ubuntu, Debian, Arch, openSUSE; Toolbox/Distrobox/Podman/Docker detection; SSH/Mosh indicators). Edit it before running the script, or edit `~/.config/starship.toml` afterwards and re-run to sync changes back — note the script will overwrite `~/.config/starship.toml` with the repo copy (backing up the previous version) rather than the other way around.
+`starship.toml` ships with OS/container-aware segments (Fedora/Bazzite, Ubuntu, Debian, Arch, openSUSE; Toolbox/Distrobox/Podman/Docker detection with container name where available; SSH/Mosh indicators) and 7 selectable color palettes: `kinoite` and `silverblue` (icy Fedora blues), `bazzite` (purple/pink gaming-OS accent), and four widely-used terminal schemes — `nord`, `dracula`, `gruvbox`, `catppuccin`. Edit `starship.toml` before running the script to add or tweak a palette, or edit `~/.config/starship.toml` afterwards and re-run to sync changes back — note the script overwrites `~/.config/starship.toml` with the repo copy (backing up the previous version if it differs) rather than the other way around.
 
 ## Credits
 

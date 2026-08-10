@@ -10,6 +10,9 @@ SOURCE_CONFIG="$SCRIPT_DIR/starship.toml"
 TMP_DIR="$(mktemp -d)"
 FONT_URL="https://github.com/ryanoasis/nerd-fonts/releases/latest/download/JetBrainsMono.tar.xz"
 
+PALETTES=(kinoite bazzite silverblue nord dracula gruvbox catppuccin)
+DEFAULT_PALETTE="kinoite"
+
 shell_name="$(basename "${SHELL:-bash}")"
 case "$shell_name" in
   zsh) rc_file="$HOME/.zshrc" ;;
@@ -38,6 +41,41 @@ add_line_once() {
     fi
 }
 
+contains_element() {
+    local needle="$1"
+    shift
+    local item
+    for item in "$@"; do
+        [[ "$item" == "$needle" ]] && return 0
+    done
+    return 1
+}
+
+choose_palette() {
+    if [[ ! -t 0 ]]; then
+        printf 'Not running interactively; defaulting to "%s" palette.\n' "$DEFAULT_PALETTE" >&2
+        echo "$DEFAULT_PALETTE"
+        return
+    fi
+
+    printf 'Choose a starship color palette:\n' >&2
+
+    local PS3="Palette [$DEFAULT_PALETTE]: "
+    local opt choice=""
+    select opt in "${PALETTES[@]}"; do
+        choice="${opt:-$DEFAULT_PALETTE}"
+        break
+    done
+
+    choice="${choice:-$DEFAULT_PALETTE}"
+
+    if ! contains_element "$choice" "${PALETTES[@]}"; then
+        choice="$DEFAULT_PALETTE"
+    fi
+
+    echo "$choice"
+}
+
 trap cleanup EXIT
 
 require_command curl
@@ -49,6 +87,9 @@ if [[ ! -f "$SOURCE_CONFIG" ]]; then
     printf 'starship.toml not found next to %s\n' "$0" >&2
     exit 1
 fi
+
+selected_palette="$(choose_palette)"
+printf 'Using "%s" palette.\n' "$selected_palette"
 
 mkdir -p "$STARSHIP_BIN_DIR"
 mkdir -p "$FONT_DIR"
@@ -63,10 +104,15 @@ find "$TMP_DIR/JetBrainsMono" -type f \( -name "*.ttf" -o -name "*.otf" \) -exec
 
 fc-cache -f "$FONT_DIR"
 
-if [[ -f "$CONFIG_FILE" ]] && ! cmp -s "$SOURCE_CONFIG" "$CONFIG_FILE"; then
+FINAL_CONFIG="$TMP_DIR/starship.toml"
+sed "s/^palette = \".*\"\$/palette = \"$selected_palette\"/" "$SOURCE_CONFIG" > "$FINAL_CONFIG"
+
+# Compared against FINAL_CONFIG (post-substitution), not SOURCE_CONFIG, so re-runs
+# with the same chosen palette don't create a spurious backup every time.
+if [[ -f "$CONFIG_FILE" ]] && ! cmp -s "$FINAL_CONFIG" "$CONFIG_FILE"; then
     cp -f "$CONFIG_FILE" "$CONFIG_FILE.bak.$(date +%Y%m%d%H%M%S)"
 fi
-cp -f "$SOURCE_CONFIG" "$CONFIG_FILE"
+cp -f "$FINAL_CONFIG" "$CONFIG_FILE"
 
 add_line_once 'export PATH="$HOME/.local/bin:$PATH"' "$rc_file"
 add_line_once "eval \"\$(starship init $shell_name)\"" "$rc_file"

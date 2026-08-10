@@ -29,6 +29,138 @@ ssh_green = "#50fa7b"
 mosh_cyan = "#8be9fd"
 dark_blue = "#205090"
 
+[palettes.bazzite]
+bg = "#0f0a1e"
+fg = "#f0e6ff"
+black = "#1a1025"
+red = "#ff4d6d"
+green = "#3ddc84"
+yellow = "#ffd166"
+blue = "#7b2ff7"
+magenta = "#ff2fb0"
+cyan = "#00e5ff"
+white = "#f0e6ff"
+bright_black = "#4a3a6a"
+fedora_blue = "#7b2ff7"
+docker_blue = "#4361ee"
+podman_purple = "#9d4edd"
+container_violet = "#c77dff"
+toolbox_dark_blue = "#3a1c71"
+distrobox_violet = "#c77dff"
+ssh_green = "#3ddc84"
+mosh_cyan = "#00e5ff"
+dark_blue = "#5a189a"
+
+[palettes.silverblue]
+bg = "#1c1e21"
+fg = "#e6e6e6"
+black = "#26282b"
+red = "#e74c3c"
+green = "#2ecc71"
+yellow = "#f4d03f"
+blue = "#3c6eb4"
+magenta = "#8e6fce"
+cyan = "#5dade2"
+white = "#e6e6e6"
+bright_black = "#7f8c8d"
+fedora_blue = "#3c6eb4"
+docker_blue = "#1d63ed"
+podman_purple = "#892ca0"
+container_violet = "#8e6fce"
+toolbox_dark_blue = "#2c3e50"
+distrobox_violet = "#a070e0"
+ssh_green = "#2ecc71"
+mosh_cyan = "#5dade2"
+dark_blue = "#294172"
+
+[palettes.nord]
+bg = "#2e3440"
+fg = "#eceff4"
+black = "#3b4252"
+red = "#bf616a"
+green = "#a3be8c"
+yellow = "#ebcb8b"
+blue = "#81a1c1"
+magenta = "#b48ead"
+cyan = "#88c0d0"
+white = "#d8dee9"
+bright_black = "#4c566a"
+fedora_blue = "#81a1c1"
+docker_blue = "#5e81ac"
+podman_purple = "#b48ead"
+container_violet = "#b48ead"
+toolbox_dark_blue = "#434c5e"
+distrobox_violet = "#b48ead"
+ssh_green = "#a3be8c"
+mosh_cyan = "#88c0d0"
+dark_blue = "#5e81ac"
+
+[palettes.dracula]
+bg = "#282a36"
+fg = "#f8f8f2"
+black = "#21222c"
+red = "#ff5555"
+green = "#50fa7b"
+yellow = "#f1fa8c"
+blue = "#bd93f9"
+magenta = "#ff79c6"
+cyan = "#8be9fd"
+white = "#f8f8f2"
+bright_black = "#6272a4"
+fedora_blue = "#bd93f9"
+docker_blue = "#6272a4"
+podman_purple = "#ff79c6"
+container_violet = "#d6acff"
+toolbox_dark_blue = "#44475a"
+distrobox_violet = "#ff92df"
+ssh_green = "#50fa7b"
+mosh_cyan = "#8be9fd"
+dark_blue = "#6272a4"
+
+[palettes.gruvbox]
+bg = "#282828"
+fg = "#ebdbb2"
+black = "#282828"
+red = "#cc241d"
+green = "#98971a"
+yellow = "#d79921"
+blue = "#458588"
+magenta = "#b16286"
+cyan = "#689d6a"
+white = "#a89984"
+bright_black = "#928374"
+fedora_blue = "#83a598"
+docker_blue = "#458588"
+podman_purple = "#b16286"
+container_violet = "#d3869b"
+toolbox_dark_blue = "#3c3836"
+distrobox_violet = "#d3869b"
+ssh_green = "#b8bb26"
+mosh_cyan = "#8ec07c"
+dark_blue = "#458588"
+
+[palettes.catppuccin]
+bg = "#1e1e2e"
+fg = "#cdd6f4"
+black = "#45475a"
+red = "#f38ba8"
+green = "#a6e3a1"
+yellow = "#f9e2af"
+blue = "#89b4fa"
+magenta = "#f5c2e7"
+cyan = "#94e2d5"
+white = "#bac2de"
+bright_black = "#585b70"
+fedora_blue = "#89b4fa"
+docker_blue = "#74c7ec"
+podman_purple = "#cba6f7"
+container_violet = "#b4befe"
+toolbox_dark_blue = "#313244"
+distrobox_violet = "#cba6f7"
+ssh_green = "#a6e3a1"
+mosh_cyan = "#94e2d5"
+dark_blue = "#89b4fa"
+
 [fill]
 symbol = " "
 
@@ -69,19 +201,43 @@ style = "bold #dfefff"
 format = "[$output]($style) "
 
 [custom.toolbox]
-command = "printf '󱂬 toolbox'"
+command = '''
+name=$(sed -n 's/^name="\(.*\)"$/\1/p' /run/.containerenv 2>/dev/null)
+if [ -n "$name" ]; then
+  printf '󱂬 toolbox: %s' "$name"
+else
+  printf '󱂬 toolbox'
+fi
+'''
 when = '[ -n "${TOOLBOX_PATH:-}" ]'
 style = "bold toolbox_dark_blue"
 format = "[$output ]($style)"
 
 [custom.distrobox]
-command = "printf ' distrobox'"
+command = '''
+name="${DBX_CONTAINER_NAME:-}"
+if [ -z "$name" ]; then
+  name=$(sed -n 's/^name="\(.*\)"$/\1/p' /run/.containerenv 2>/dev/null)
+fi
+if [ -n "$name" ]; then
+  printf ' distrobox: %s' "$name"
+else
+  printf ' distrobox'
+fi
+'''
 when = '[ -z "${TOOLBOX_PATH:-}" ] && { [ -n "${DISTROBOX_ENTER_PATH:-}" ] || [ -n "${DBX_CONTAINER_NAME:-}" ] || grep -qi distrobox /run/.containerenv 2>/dev/null; }'
 style = "bold distrobox_violet"
 format = "[$output ]($style)"
 
 [custom.podman]
-command = "printf ' podman'"
+command = '''
+name=$(sed -n 's/^name="\(.*\)"$/\1/p' /run/.containerenv 2>/dev/null)
+if [ -n "$name" ]; then
+  printf ' podman: %s' "$name"
+else
+  printf ' podman'
+fi
+'''
 when = '[ -z "${TOOLBOX_PATH:-}" ] && [ -z "${DISTROBOX_ENTER_PATH:-}" ] && [ -z "${DBX_CONTAINER_NAME:-}" ] && [ -f /run/.containerenv ]'
 style = "bold podman_purple"
 format = "[$output ]($style)"
