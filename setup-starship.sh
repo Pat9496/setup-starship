@@ -53,6 +53,25 @@ contains_element() {
     return 1
 }
 
+font_installed() {
+    fc-list : family 2>/dev/null | grep -qF "$1 Nerd Font"
+}
+
+detect_installed_font() {
+    local name found="" count=0
+    for name in "${FONTS[@]}"; do
+        if font_installed "$name"; then
+            found="$name"
+            count=$((count + 1))
+        fi
+    done
+    if [[ "$count" -eq 1 ]]; then
+        echo "$found"
+        return 0
+    fi
+    return 1
+}
+
 usage() {
     cat <<EOF
 Usage: $(basename "$0") [-f|--font NAME] [-h|--help]
@@ -89,25 +108,38 @@ choose_palette() {
 }
 
 choose_font() {
+    local installed_font=""
+    installed_font="$(detect_installed_font)" || installed_font=""
+    local default_font="$DEFAULT_FONT"
+    [[ -n "$installed_font" ]] && default_font="$installed_font"
+
     if [[ ! -t 0 ]]; then
-        printf 'Not running interactively; defaulting to "%s" font.\n' "$DEFAULT_FONT" >&2
-        echo "$DEFAULT_FONT"
+        if [[ -n "$installed_font" ]]; then
+            printf 'Not running interactively; "%s Nerd Font" is already installed, keeping it.\n' "$installed_font" >&2
+        else
+            printf 'Not running interactively; defaulting to "%s" font.\n' "$default_font" >&2
+        fi
+        echo "$default_font"
         return
+    fi
+
+    if [[ -n "$installed_font" ]]; then
+        printf 'Detected "%s Nerd Font" already installed.\n' "$installed_font" >&2
     fi
 
     printf 'Choose a Nerd Font to install:\n' >&2
 
-    local PS3="Font [$DEFAULT_FONT]: "
+    local PS3="Font [$default_font]: "
     local opt choice=""
     select opt in "${FONTS[@]}"; do
-        choice="${opt:-$DEFAULT_FONT}"
+        choice="${opt:-$default_font}"
         break
     done
 
-    choice="${choice:-$DEFAULT_FONT}"
+    choice="${choice:-$default_font}"
 
     if ! contains_element "$choice" "${FONTS[@]}"; then
-        choice="$DEFAULT_FONT"
+        choice="$default_font"
     fi
 
     echo "$choice"
@@ -150,6 +182,7 @@ require_command curl
 require_command tar
 require_command fc-cache
 require_command fc-match
+require_command fc-list
 
 if [[ ! -f "$SOURCE_CONFIG" ]]; then
     printf 'starship.toml not found next to %s\n' "$0" >&2
@@ -172,12 +205,16 @@ mkdir -p "$CONFIG_DIR"
 
 curl -fsSL https://starship.rs/install.sh | sh -s -- -b "$STARSHIP_BIN_DIR" -y
 
-curl -fL "$FONT_URL" -o "$TMP_DIR/${selected_font}.tar.xz"
-mkdir -p "$TMP_DIR/${selected_font}"
-tar -xf "$TMP_DIR/${selected_font}.tar.xz" -C "$TMP_DIR/${selected_font}"
-find "$TMP_DIR/${selected_font}" -type f \( -name "*.ttf" -o -name "*.otf" \) -exec cp -f {} "$FONT_DIR/" \;
+if font_installed "$selected_font"; then
+    printf '"%s Nerd Font" is already installed; skipping download.\n' "$selected_font"
+else
+    curl -fL "$FONT_URL" -o "$TMP_DIR/${selected_font}.tar.xz"
+    mkdir -p "$TMP_DIR/${selected_font}"
+    tar -xf "$TMP_DIR/${selected_font}.tar.xz" -C "$TMP_DIR/${selected_font}"
+    find "$TMP_DIR/${selected_font}" -type f \( -name "*.ttf" -o -name "*.otf" \) -exec cp -f {} "$FONT_DIR/" \;
 
-fc-cache -f "$FONT_DIR"
+    fc-cache -f "$FONT_DIR"
+fi
 
 FINAL_CONFIG="$TMP_DIR/starship.toml"
 sed "s/^palette = \".*\"\$/palette = \"$selected_palette\"/" "$SOURCE_CONFIG" > "$FINAL_CONFIG"

@@ -9,7 +9,7 @@ chmod +x setup-starship.sh  # only needed if the executable bit didn't survive h
 ./setup-starship.sh
 ```
 
-You'll be prompted to pick a color palette (defaults to `kinoite` if you skip the prompt or run non-interactively) and a Nerd Font (defaults to `JetBrainsMono`). Open a new terminal afterwards for the prompt to take effect.
+You'll be prompted to pick a color palette (defaults to `kinoite` if you skip the prompt or run non-interactively) and a Nerd Font (defaults to `JetBrainsMono`, or to whichever of `JetBrainsMono`/`FiraCode`/`Hack` is already installed, if exactly one of them is). If the font you end up with is already installed, the download/extraction step is skipped. Open a new terminal afterwards for the prompt to take effect.
 
 For unattended/automated runs, the font choice can be passed on the command line to skip the interactive prompt: `--font <name>`, `--font=<name>`, or `-f <name>`, where `<name>` is `JetBrainsMono`, `FiraCode`, or `Hack`. The palette prompt always stays interactive (or falls back to `kinoite` when not interactive).
 
@@ -17,7 +17,7 @@ For unattended/automated runs, the font choice can be passed on the command line
 
 1. Prompts you to choose a color palette: `kinoite`, `bazzite`, `silverblue`, `nord`, `dracula`, `gruvbox`, `catppuccin`; and a Nerd Font: `JetBrainsMono`, `FiraCode`, `Hack`.
 2. Installs the `starship` binary to `~/.local/bin` via the official `starship.rs/install.sh` installer.
-3. Downloads and installs the chosen Nerd Font to `~/.local/share/fonts` and refreshes the font cache.
+3. Downloads and installs the chosen Nerd Font to `~/.local/share/fonts` and refreshes the font cache — skipped if that font is already installed.
 4. Adds `PATH` and `eval "$(starship init <shell>)"` lines to `~/.bashrc` or `~/.zshrc` (based on `$SHELL`), skipping lines that are already present.
 5. Copies `starship.toml` from this repo to `~/.config/starship.toml` with the `palette` line set to your chosen palette, backing up any existing, differing config first.
 
