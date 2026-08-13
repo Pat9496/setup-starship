@@ -53,6 +53,47 @@ contains_element() {
     return 1
 }
 
+prompt_choice() {
+    local prompt="$1"
+    local default="$2"
+    shift 2
+    local -a options=("$@")
+
+    local i=1 opt
+    for opt in "${options[@]}"; do
+        printf '%d) %s\n' "$i" "$opt" >&2
+        i=$((i + 1))
+    done
+
+    local choice="" reply
+    while true; do
+        printf '%s' "$prompt" >&2
+        if ! IFS= read -r reply; then
+            choice="$default"
+            break
+        fi
+
+        if [[ -z "$reply" ]]; then
+            choice="$default"
+            break
+        fi
+
+        if [[ "$reply" =~ ^[0-9]+$ ]] && (( reply >= 1 && reply <= ${#options[@]} )); then
+            choice="${options[$((reply - 1))]}"
+            break
+        fi
+
+        if contains_element "$reply" "${options[@]}"; then
+            choice="$reply"
+            break
+        fi
+
+        printf 'Invalid choice: "%s"\n' "$reply" >&2
+    done
+
+    echo "$choice"
+}
+
 font_installed() {
     fc-list : family 2>/dev/null | grep -qF "$1 Nerd Font"
 }
@@ -91,14 +132,8 @@ choose_palette() {
 
     printf 'Choose a starship color palette:\n' >&2
 
-    local PS3="Palette [$DEFAULT_PALETTE]: "
-    local opt choice=""
-    select opt in "${PALETTES[@]}"; do
-        choice="${opt:-$DEFAULT_PALETTE}"
-        break
-    done
-
-    choice="${choice:-$DEFAULT_PALETTE}"
+    local choice=""
+    choice="$(prompt_choice "Palette [$DEFAULT_PALETTE]: " "$DEFAULT_PALETTE" "${PALETTES[@]}")"
 
     if ! contains_element "$choice" "${PALETTES[@]}"; then
         choice="$DEFAULT_PALETTE"
@@ -129,14 +164,8 @@ choose_font() {
 
     printf 'Choose a Nerd Font to install:\n' >&2
 
-    local PS3="Font [$default_font]: "
-    local opt choice=""
-    select opt in "${FONTS[@]}"; do
-        choice="${opt:-$default_font}"
-        break
-    done
-
-    choice="${choice:-$default_font}"
+    local choice=""
+    choice="$(prompt_choice "Font [$default_font]: " "$default_font" "${FONTS[@]}")"
 
     if ! contains_element "$choice" "${FONTS[@]}"; then
         choice="$default_font"

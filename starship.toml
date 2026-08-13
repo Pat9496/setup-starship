@@ -1,5 +1,5 @@
 format = """
-${custom.fedora}${custom.ubuntu}${custom.debian}${custom.arch}${custom.opensuse}${custom.linux}$username$hostname$directory$git_branch$git_commit$git_state$git_status$terraform$kubernetes$azure${custom.toolbox}${custom.distrobox}${custom.podman}${custom.docker}$shlvl$jobs$fill$cmd_duration$status$time
+${custom.fedora}${custom.ubuntu}${custom.debian}${custom.arch}${custom.opensuse}${custom.linux}$username${custom.hostname_fedora}${custom.hostname_ubuntu}${custom.hostname_debian}${custom.hostname_arch}${custom.hostname_opensuse}${custom.hostname_linux}$directory$git_branch$git_commit$git_state$git_status$terraform$kubernetes$azure${custom.toolbox}${custom.distrobox}${custom.podman}${custom.docker}$shlvl$jobs$fill$cmd_duration$status$time
 ${custom.root_symbol}${custom.toolbox_symbol}${custom.distrobox_symbol}${custom.podman_symbol}${custom.docker_symbol}${custom.mosh_symbol}${custom.ssh_symbol}$character"""
 
 add_newline = true
@@ -19,7 +19,6 @@ magenta = "#ad83f9"
 cyan = "#8be9fd"
 white = "#dfefff"
 bright_black = "#6272a4"
-fedora_blue = "#51a2da"
 docker_blue = "#1d63ed"
 podman_purple = "#892ca0"
 container_violet = "#ad83f9"
@@ -27,7 +26,8 @@ toolbox_dark_blue = "#1f4f8f"
 distrobox_violet = "#a070e0"
 ssh_green = "#50fa7b"
 mosh_cyan = "#8be9fd"
-dark_blue = "#205090"
+username_color = "#8be9fd"
+directory_color = "#51a2da"
 
 [palettes.bazzite]
 bg = "#0f0a1e"
@@ -40,8 +40,7 @@ blue = "#7b2ff7"
 magenta = "#ff2fb0"
 cyan = "#00e5ff"
 white = "#f0e6ff"
-bright_black = "#4a3a6a"
-fedora_blue = "#7b2ff7"
+bright_black = "#8a8a8a"
 docker_blue = "#4361ee"
 podman_purple = "#9d4edd"
 container_violet = "#c77dff"
@@ -49,7 +48,8 @@ toolbox_dark_blue = "#3a1c71"
 distrobox_violet = "#c77dff"
 ssh_green = "#3ddc84"
 mosh_cyan = "#00e5ff"
-dark_blue = "#5a189a"
+username_color = "#7b2ff7"
+directory_color = "#e64dff"
 
 [palettes.silverblue]
 bg = "#1c1e21"
@@ -63,7 +63,6 @@ magenta = "#8e6fce"
 cyan = "#5dade2"
 white = "#e6e6e6"
 bright_black = "#7f8c8d"
-fedora_blue = "#3c6eb4"
 docker_blue = "#1d63ed"
 podman_purple = "#892ca0"
 container_violet = "#8e6fce"
@@ -71,7 +70,8 @@ toolbox_dark_blue = "#2c3e50"
 distrobox_violet = "#a070e0"
 ssh_green = "#2ecc71"
 mosh_cyan = "#5dade2"
-dark_blue = "#294172"
+username_color = "#5dade2"
+directory_color = "#3c6eb4"
 
 [palettes.nord]
 bg = "#2e3440"
@@ -85,7 +85,6 @@ magenta = "#b48ead"
 cyan = "#88c0d0"
 white = "#d8dee9"
 bright_black = "#4c566a"
-fedora_blue = "#81a1c1"
 docker_blue = "#5e81ac"
 podman_purple = "#b48ead"
 container_violet = "#b48ead"
@@ -93,7 +92,8 @@ toolbox_dark_blue = "#434c5e"
 distrobox_violet = "#b48ead"
 ssh_green = "#a3be8c"
 mosh_cyan = "#88c0d0"
-dark_blue = "#5e81ac"
+username_color = "#88c0d0"
+directory_color = "#81a1c1"
 
 [palettes.dracula]
 bg = "#282a36"
@@ -107,7 +107,6 @@ magenta = "#ff79c6"
 cyan = "#8be9fd"
 white = "#f8f8f2"
 bright_black = "#6272a4"
-fedora_blue = "#bd93f9"
 docker_blue = "#6272a4"
 podman_purple = "#ff79c6"
 container_violet = "#d6acff"
@@ -115,7 +114,8 @@ toolbox_dark_blue = "#44475a"
 distrobox_violet = "#ff92df"
 ssh_green = "#50fa7b"
 mosh_cyan = "#8be9fd"
-dark_blue = "#6272a4"
+username_color = "#8be9fd"
+directory_color = "#bd93f9"
 
 [palettes.gruvbox]
 bg = "#282828"
@@ -129,7 +129,6 @@ magenta = "#b16286"
 cyan = "#689d6a"
 white = "#a89984"
 bright_black = "#928374"
-fedora_blue = "#83a598"
 docker_blue = "#458588"
 podman_purple = "#b16286"
 container_violet = "#d3869b"
@@ -137,7 +136,8 @@ toolbox_dark_blue = "#3c3836"
 distrobox_violet = "#d3869b"
 ssh_green = "#b8bb26"
 mosh_cyan = "#8ec07c"
-dark_blue = "#458588"
+username_color = "#689d6a"
+directory_color = "#458588"
 
 [palettes.catppuccin]
 bg = "#1e1e2e"
@@ -151,7 +151,6 @@ magenta = "#f5c2e7"
 cyan = "#94e2d5"
 white = "#bac2de"
 bright_black = "#585b70"
-fedora_blue = "#89b4fa"
 docker_blue = "#74c7ec"
 podman_purple = "#cba6f7"
 container_violet = "#b4befe"
@@ -159,7 +158,8 @@ toolbox_dark_blue = "#313244"
 distrobox_violet = "#cba6f7"
 ssh_green = "#a6e3a1"
 mosh_cyan = "#94e2d5"
-dark_blue = "#89b4fa"
+username_color = "#94e2d5"
+directory_color = "#89b4fa"
 
 [fill]
 symbol = " "
@@ -167,7 +167,7 @@ symbol = " "
 [custom.fedora]
 command = "printf '󰣛'"
 when = "grep -Eqi '^ID=(fedora|bazzite)|^VARIANT_ID=bazzite|bazzite' /etc/os-release"
-style = "bold fedora_blue"
+style = "bold #3c6eb4"
 format = "[$output]($style) "
 
 [custom.ubuntu]
@@ -179,7 +179,7 @@ format = "[$output]($style) "
 [custom.debian]
 command = "printf '󰣚'"
 when = "grep -Eqi '^ID=debian' /etc/os-release"
-style = "bold #d70a53"
+style = "bold #ce0056"
 format = "[$output]($style) "
 
 [custom.arch]
@@ -199,6 +199,42 @@ command = "printf '󰌽'"
 when = "! grep -Eqi '^ID=(fedora|bazzite|ubuntu|debian|arch|opensuse|opensuse-tumbleweed|opensuse-leap)|^VARIANT_ID=bazzite|bazzite' /etc/os-release"
 style = "bold #dfefff"
 format = "[$output]($style) "
+
+[custom.hostname_fedora]
+command = "cat /proc/sys/kernel/hostname"
+when = "grep -Eqi '^ID=(fedora|bazzite)|^VARIANT_ID=bazzite|bazzite' /etc/os-release"
+style = "#3c6eb4"
+format = "[@$output ]($style)"
+
+[custom.hostname_ubuntu]
+command = "cat /proc/sys/kernel/hostname"
+when = "grep -Eqi '^ID=ubuntu' /etc/os-release"
+style = "#e95420"
+format = "[@$output ]($style)"
+
+[custom.hostname_debian]
+command = "cat /proc/sys/kernel/hostname"
+when = "grep -Eqi '^ID=debian' /etc/os-release"
+style = "#ce0056"
+format = "[@$output ]($style)"
+
+[custom.hostname_arch]
+command = "cat /proc/sys/kernel/hostname"
+when = "grep -Eqi '^ID=arch' /etc/os-release"
+style = "#1793d1"
+format = "[@$output ]($style)"
+
+[custom.hostname_opensuse]
+command = "cat /proc/sys/kernel/hostname"
+when = "grep -Eqi '^ID=(opensuse|opensuse-tumbleweed|opensuse-leap)' /etc/os-release"
+style = "#73ba25"
+format = "[@$output ]($style)"
+
+[custom.hostname_linux]
+command = "cat /proc/sys/kernel/hostname"
+when = "! grep -Eqi '^ID=(fedora|bazzite|ubuntu|debian|arch|opensuse|opensuse-tumbleweed|opensuse-leap)|^VARIANT_ID=bazzite|bazzite' /etc/os-release"
+style = "#dfefff"
+format = "[@$output ]($style)"
 
 [custom.toolbox]
 command = '''
@@ -292,17 +328,12 @@ format = "[$output]($style) "
 
 [username]
 show_always = true
-style_user = "bold cyan"
+style_user = "bold username_color"
 style_root = "bold red"
 format = "[$user]($style)"
 
-[hostname]
-ssh_only = false
-style = "dark_blue"
-format = "[@$hostname ]($style)"
-
 [directory]
-style = "bold blue"
+style = "bold directory_color"
 home_symbol = "~"
 truncation_length = 6
 truncation_symbol = "…/"
