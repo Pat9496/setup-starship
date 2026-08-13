@@ -1,5 +1,5 @@
 format = """
-${custom.fedora}${custom.ubuntu}${custom.debian}${custom.arch}${custom.opensuse}${custom.linux}$username${custom.hostname_fedora}${custom.hostname_ubuntu}${custom.hostname_debian}${custom.hostname_arch}${custom.hostname_opensuse}${custom.hostname_linux}$directory$git_branch$git_commit$git_state$git_status$terraform$kubernetes$azure${custom.toolbox}${custom.distrobox}${custom.podman}${custom.docker}$shlvl$jobs$fill$cmd_duration$status$time
+${custom.fedora}${custom.bazzite}${custom.ubuntu}${custom.debian}${custom.arch}${custom.opensuse}${custom.linux}$username${custom.hostname_fedora}${custom.hostname_bazzite}${custom.hostname_ubuntu}${custom.hostname_debian}${custom.hostname_arch}${custom.hostname_opensuse}${custom.hostname_linux}$directory$git_branch$git_commit$git_state$git_status$terraform$kubernetes$azure${custom.toolbox}${custom.distrobox}${custom.podman}${custom.docker}$shlvl$jobs$fill$cmd_duration$status$time
 ${custom.root_symbol}${custom.toolbox_symbol}${custom.distrobox_symbol}${custom.podman_symbol}${custom.docker_symbol}${custom.mosh_symbol}${custom.ssh_symbol}$character"""
 
 add_newline = true
@@ -166,8 +166,14 @@ symbol = " "
 
 [custom.fedora]
 command = "printf '󰣛'"
-when = "grep -Eqi '^ID=(fedora|bazzite)|^VARIANT_ID=bazzite|bazzite' /etc/os-release"
+when = "grep -Eqi '^ID=fedora' /etc/os-release && ! grep -Eqi '^VARIANT_ID=bazzite|bazzite' /etc/os-release"
 style = "bold #3c6eb4"
+format = "[$output]($style) "
+
+[custom.bazzite]
+command = "printf '󰣛'"
+when = "grep -Eqi '^ID=bazzite|^VARIANT_ID=bazzite|bazzite' /etc/os-release"
+style = "bold #7b2ff7"
 format = "[$output]($style) "
 
 [custom.ubuntu]
@@ -202,8 +208,14 @@ format = "[$output]($style) "
 
 [custom.hostname_fedora]
 command = "cat /proc/sys/kernel/hostname"
-when = "grep -Eqi '^ID=(fedora|bazzite)|^VARIANT_ID=bazzite|bazzite' /etc/os-release"
+when = "grep -Eqi '^ID=fedora' /etc/os-release && ! grep -Eqi '^VARIANT_ID=bazzite|bazzite' /etc/os-release"
 style = "#3c6eb4"
+format = "[@$output ]($style)"
+
+[custom.hostname_bazzite]
+command = "cat /proc/sys/kernel/hostname"
+when = "grep -Eqi '^ID=bazzite|^VARIANT_ID=bazzite|bazzite' /etc/os-release"
+style = "#7b2ff7"
 format = "[@$output ]($style)"
 
 [custom.hostname_ubuntu]

@@ -260,3 +260,32 @@ add_line_once "eval \"\$(starship init $shell_name)\"" "$rc_file"
 
 "$STARSHIP_BIN_DIR/starship" --version >/dev/null
 fc-match "$selected_font Nerd Font" >/dev/null
+
+chezmoi_track() {
+    if ! command -v chezmoi >/dev/null 2>&1; then
+        printf 'chezmoi not installed; skipping chezmoi tracking.\n'
+        return 0
+    fi
+
+    local source_path=""
+    if ! source_path="$(chezmoi source-path 2>/dev/null)" || [[ -z "$source_path" ]] || [[ ! -d "$source_path" ]]; then
+        printf 'chezmoi not initialized; skipping chezmoi tracking.\n'
+        return 0
+    fi
+
+    if [[ -z "$(find "$source_path" -mindepth 1 -print -quit 2>/dev/null)" ]]; then
+        printf 'chezmoi not initialized; skipping chezmoi tracking.\n'
+        return 0
+    fi
+
+    local file
+    for file in "$CONFIG_FILE" "$rc_file"; do
+        if chezmoi add "$file" >/dev/null 2>&1; then
+            printf 'Added "%s" to chezmoi.\n' "$file"
+        else
+            printf 'Warning: "chezmoi add %s" failed; leaving it untracked.\n' "$file" >&2
+        fi
+    done
+}
+
+chezmoi_track
