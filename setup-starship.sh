@@ -145,10 +145,11 @@ choose_palette() {
 choose_font() {
     local installed_font=""
     installed_font="$(detect_installed_font)" || installed_font=""
-    local default_font="$DEFAULT_FONT"
-    [[ -n "$installed_font" ]] && default_font="$installed_font"
 
     if [[ ! -t 0 ]]; then
+        local default_font="$DEFAULT_FONT"
+        [[ -n "$installed_font" ]] && default_font="$installed_font"
+
         if [[ -n "$installed_font" ]]; then
             printf 'Not running interactively; "%s Nerd Font" is already installed, keeping it.\n' "$installed_font" >&2
         else
@@ -165,10 +166,10 @@ choose_font() {
     printf 'Choose a Nerd Font to install:\n' >&2
 
     local choice=""
-    choice="$(prompt_choice "Font [$default_font]: " "$default_font" "${FONTS[@]}")"
+    choice="$(prompt_choice "Font [$DEFAULT_FONT]: " "$DEFAULT_FONT" "${FONTS[@]}")"
 
     if ! contains_element "$choice" "${FONTS[@]}"; then
-        choice="$default_font"
+        choice="$DEFAULT_FONT"
     fi
 
     echo "$choice"
@@ -278,12 +279,28 @@ chezmoi_track() {
         return 0
     fi
 
-    local file
+    local file action verb
     for file in "$CONFIG_FILE" "$rc_file"; do
-        if chezmoi add "$file" >/dev/null 2>&1; then
-            printf 'Added "%s" to chezmoi.\n' "$file"
+        if chezmoi source-path "$file" >/dev/null 2>&1; then
+            action="re-add"
+            verb="Updated"
         else
-            printf 'Warning: "chezmoi add %s" failed; leaving it untracked.\n' "$file" >&2
+            action="add"
+            verb="Added"
+        fi
+
+        # chezmoi add on an already-managed template (e.g. dot_bashrc.tmpl)
+        # would discard the template and prompts for confirmation first; that
+        # prompt is written to stdout, which is redirected to /dev/null below,
+        # so it would be invisible while chezmoi still blocked waiting for an
+        # answer on the controlling terminal. re-add never overwrites
+        # templates, so it does not prompt. --no-tty is kept as a second line
+        # of defense: if anything still tries to prompt, chezmoi fails
+        # immediately instead of hanging.
+        if chezmoi "$action" --no-tty "$file" </dev/null >/dev/null 2>&1; then
+            printf '%s "%s" to chezmoi.\n' "$verb" "$file"
+        else
+            printf 'Warning: "chezmoi %s %s" failed; leaving it as-is.\n' "$action" "$file" >&2
         fi
     done
 }

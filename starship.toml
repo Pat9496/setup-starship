@@ -209,43 +209,43 @@ format = "[$output]($style) "
 [custom.hostname_fedora]
 command = "cat /proc/sys/kernel/hostname"
 when = "grep -Eqi '^ID=fedora' /etc/os-release && ! grep -Eqi '^VARIANT_ID=bazzite|bazzite' /etc/os-release"
-style = "#3c6eb4"
+style = "#2d5387"
 format = "[@$output ]($style)"
 
 [custom.hostname_bazzite]
 command = "cat /proc/sys/kernel/hostname"
 when = "grep -Eqi '^ID=bazzite|^VARIANT_ID=bazzite|bazzite' /etc/os-release"
-style = "#7b2ff7"
+style = "#5c23b9"
 format = "[@$output ]($style)"
 
 [custom.hostname_ubuntu]
 command = "cat /proc/sys/kernel/hostname"
 when = "grep -Eqi '^ID=ubuntu' /etc/os-release"
-style = "#e95420"
+style = "#af3f18"
 format = "[@$output ]($style)"
 
 [custom.hostname_debian]
 command = "cat /proc/sys/kernel/hostname"
 when = "grep -Eqi '^ID=debian' /etc/os-release"
-style = "#ce0056"
+style = "#9b0041"
 format = "[@$output ]($style)"
 
 [custom.hostname_arch]
 command = "cat /proc/sys/kernel/hostname"
 when = "grep -Eqi '^ID=arch' /etc/os-release"
-style = "#1793d1"
+style = "#116e9d"
 format = "[@$output ]($style)"
 
 [custom.hostname_opensuse]
 command = "cat /proc/sys/kernel/hostname"
 when = "grep -Eqi '^ID=(opensuse|opensuse-tumbleweed|opensuse-leap)' /etc/os-release"
-style = "#73ba25"
+style = "#568c1c"
 format = "[@$output ]($style)"
 
 [custom.hostname_linux]
 command = "cat /proc/sys/kernel/hostname"
 when = "! grep -Eqi '^ID=(fedora|bazzite|ubuntu|debian|arch|opensuse|opensuse-tumbleweed|opensuse-leap)|^VARIANT_ID=bazzite|bazzite' /etc/os-release"
-style = "#dfefff"
+style = "#a7b3bf"
 format = "[@$output ]($style)"
 
 [custom.toolbox]
