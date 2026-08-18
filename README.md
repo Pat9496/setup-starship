@@ -1,6 +1,19 @@
 # setup-starship
 
+[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](LICENSE)
+[![Shell: Bash](https://img.shields.io/badge/Shell-Bash-4EAA25?logo=gnubash&logoColor=white)](setup-starship.sh)
+![Linux](https://img.shields.io/badge/Linux-FCC624?style=flat&logo=linux&logoColor=black)
+
 A standalone, idempotent setup script for the [Starship](https://starship.rs) shell prompt on Linux. Installs the Starship binary and a selectable Nerd Font (JetBrainsMono, FiraCode, or Hack) into the user's home directory (no `sudo`), wires up shell initialization, and deploys a bundled `starship.toml` config.
+
+## Table of Contents
+
+- [Usage](#usage)
+- [What it does](#what-it-does)
+- [Requirements](#requirements)
+- [Config](#config)
+- [Credits](#credits)
+- [License](#license)
 
 ## Usage
 
