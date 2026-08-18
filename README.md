@@ -6,6 +6,8 @@
 
 A standalone, idempotent setup script for the [Starship](https://starship.rs) shell prompt on Linux. Installs the Starship binary and a selectable Nerd Font (JetBrainsMono, FiraCode, or Hack) into the user's home directory (no `sudo`), wires up shell initialization, and deploys a bundled `starship.toml` config.
 
+[Deutsche Version](README.de.md)
+
 ## Table of Contents
 
 - [Usage](#usage)
